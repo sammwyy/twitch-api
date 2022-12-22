@@ -1,32 +1,71 @@
 import fetch from 'isomorphic-unfetch';
 import { BitsClient } from './bits/bits-client';
+import { ChannelPointsClient } from './channel-points';
 import { TwitchAPIException } from './twitch-api-exception';
+import { TwitchUser } from './users';
 import { UsersClient } from './users/users-client';
 import { jsonToURLEncoded } from './utils';
 
 interface TwitchAPISettings {
   clientId: string;
   accessToken: string;
+  userId?: string;
 }
 
 export class TwitchAPI {
-  public readonly settings: TwitchAPISettings;
+  private readonly settings: TwitchAPISettings;
+  private user: TwitchUser | null;
 
   public readonly bits: BitsClient;
+  public readonly channelpoints: ChannelPointsClient;
   public readonly users: UsersClient;
 
   constructor(settings: TwitchAPISettings) {
     this.settings = settings;
+    this.user = null;
 
     this.bits = new BitsClient(this);
+    this.channelpoints = new ChannelPointsClient(this);
     this.users = new UsersClient(this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _endpoint(uri: string, query: Record<string, any> | null = null): string {
+  public async getUser(): Promise<TwitchUser> {
+    if (!this.user) {
+      this.user = await this.users.getUser();
+    }
+
+    return this.user;
+  }
+
+  public async setUser(user: TwitchUser) {
+    this.user = user;
+  }
+
+  private _endpoint(
+    uri: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query: Record<string, any> | null = null,
+  ): string {
     const base = 'https://api.twitch.tv/helix/';
     const queryStr = query ? '?' + jsonToURLEncoded(query) : '';
     return base + uri + queryStr;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async delete(url: string, query: Record<string, any> | null = null) {
+    const req = await fetch(this._endpoint(url, query), {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + this.settings.accessToken,
+        'Client-Id': this.settings.clientId,
+      },
+    });
+
+    const res = await req.json().catch(() => null);
+    if (res?.status && res?.message) {
+      throw new TwitchAPIException(res.status, res.message);
+    }
+    return res;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,12 +77,11 @@ export class TwitchAPI {
         'Client-Id': this.settings.clientId,
       },
     });
-    const res = await req.json();
 
-    if (res.status && res.message) {
+    const res = await req.json().catch(() => null);
+    if (res?.status && res?.message) {
       throw new TwitchAPIException(res.status, res.message);
     }
-
     return res;
   }
 
@@ -63,12 +101,11 @@ export class TwitchAPI {
       },
       body: JSON.stringify(body),
     });
-    const res = await req.json();
 
-    if (res.status && res.message) {
+    const res = await req.json().catch(() => null);
+    if (res?.status && res?.message) {
       throw new TwitchAPIException(res.status, res.message);
     }
-
     return res;
   }
 }

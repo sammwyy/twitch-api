@@ -1,4 +1,6 @@
 import { TwitchAPI } from '../twitch-api';
+import { TwitchAPIException } from '../twitch-api-exception';
+import { CustomReward } from './interfaces';
 
 interface CreateCustomRewardProps {
   title: string;
@@ -23,12 +25,51 @@ export class ChannelPointsClient {
     this.api = api;
   }
 
-  public async createCustomReward(props: CreateCustomRewardProps) {
-    const broadcaster_id = this.api.settings.clientId;
+  public async createCustomReward(
+    props: CreateCustomRewardProps,
+  ): Promise<CustomReward> {
+    const broadcaster_id = (await this.api.getUser()).id;
     const { data } = await this.api.post(
-      'https://api.twitch.tv/helix/channel_points/custom_rewards',
+      'channel_points/custom_rewards',
       { broadcaster_id },
       props,
     );
+    return data[0] as CustomReward;
+  }
+
+  public async deleteCustomReward(id: string): Promise<boolean> {
+    const broadcaster_id = (await this.api.getUser()).id;
+    await this.api.delete('channel_points/custom_rewards', {
+      broadcaster_id,
+      id,
+    });
+    return true;
+  }
+
+  public async getCustomReward(id: string): Promise<CustomReward | null> {
+    const broadcaster_id = (await this.api.getUser()).id;
+
+    const reward = await this.api
+      .get('channel_points/custom_rewards', {
+        broadcaster_id,
+        id,
+      })
+      .catch((e: TwitchAPIException) => {
+        if (e.getStatusCode() == 404) return null;
+        throw e;
+      });
+
+    return reward?.data[0] as CustomReward | null;
+  }
+
+  public async getCustomRewards(
+    only_manageable_rewards = false,
+  ): Promise<CustomReward[]> {
+    const broadcaster_id = (await this.api.getUser()).id;
+    const { data } = await this.api.get('channel_points/custom_rewards', {
+      broadcaster_id,
+      only_manageable_rewards,
+    });
+    return data as CustomReward[];
   }
 }
