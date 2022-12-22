@@ -34,6 +34,48 @@ const client = new TwitchOAuth({
 const { TwitchAPI } = require('twitch-api-ts').default;
 ```
 
+## 📝 To Do
+
+- Bits:
+  - [x] Get bits leaderboard.
+  - [ ] Get Cheermotes.
+  - [ ] Get Extension Transactions.
+- Channels:
+  - [ ] Get channel information.
+  - [ ] Modify channel information.
+  - [ ] Get channel editors.
+- Channel Points:
+  - [x] Create custom rewards.
+  - [x] Get custom rewards.
+  - [ ] Get rewards redemptions.
+  - [x] Delete custom rewards.
+  - [ ] Update custom rewards.
+  - [ ] Update redemption status.
+- Charity:
+  - [ ] Get charity campaign.
+  - [ ] Get charity campaign donations.
+- Chat:
+  - [ ] Get chatters.
+  - [ ] Get channel emotes.
+  - [ ] Get global emotes.
+  - [ ] Get emote sets.
+  - [ ] Get channel chat badges.
+  - [ ] Get chat settings.
+  - [ ] Update chat settings.
+  - [ ] Get user chat color.
+  - [ ] Update user chat color.
+- Clips:
+  - [ ] Create clip.
+  - [ ] Get clips.
+- Entitlements:
+  - [ ] Get code status.
+  - [ ] Get drrops entitlements.
+  - [ ] Update drops entitlements.
+  - [ ] Redeem code.
+Users:
+  - [x] Get users.
+And more...
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
