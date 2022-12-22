@@ -1,1 +1,1 @@
-export * from './TwitchUsers';
+export * from './TwitchUser';

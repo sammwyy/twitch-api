@@ -1,5 +1,5 @@
 import { TwitchAPI } from '../twitch-api';
-import { TwitchUser } from './interfaces/TwitchUsers';
+import { TwitchUser } from './interfaces/TwitchUser';
 
 interface GetUserProps {
   id?: string;
