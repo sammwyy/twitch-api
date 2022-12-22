@@ -18,10 +18,7 @@ export class BitsClient {
   public async getLeaderboard(
     props?: GetBitsLeaderboardProps,
   ): Promise<BitsLeaderboardUser[]> {
-    const { data } = await this.api.get(
-      'https://api.twitch.tv/helix/bits/leaderboard',
-      props,
-    );
+    const { data } = await this.api.get('bits/leaderboard', props);
     return data as BitsLeaderboardUser[];
   }
 }

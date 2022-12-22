@@ -19,10 +19,7 @@ export class UsersClient {
   }
 
   public async getUser(props?: GetUserProps): Promise<TwitchUser> {
-    const { data } = await this.api.get(
-      'https://api.twitch.tv/helix/users',
-      props,
-    );
+    const { data } = await this.api.get('users', props);
     return data[0] as TwitchUser;
   }
 
@@ -30,9 +27,7 @@ export class UsersClient {
     const ids = props.ids?.map((user) => 'id=' + user).join('&') || '';
     const logins = props.logins?.map((user) => 'login=' + user).join('&') || '';
 
-    const { data } = await this.api.get(
-      'https://api.twitch.tv/helix/users?' + ids + logins,
-    );
+    const { data } = await this.api.get('users?' + ids + logins);
     return data as TwitchUser[];
   }
 }
