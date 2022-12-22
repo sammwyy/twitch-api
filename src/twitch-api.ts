@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import { BitsClient } from './bits/bits-client';
 import { TwitchAPIException } from './twitch-api-exception';
 import { UsersClient } from './users/users-client';
 import { jsonToURLEncoded } from './utils';
@@ -11,11 +12,13 @@ interface TwitchAPISettings {
 export class TwitchAPI {
   private readonly settings: TwitchAPISettings;
 
+  public readonly bits: BitsClient;
   public readonly users: UsersClient;
 
   constructor(settings: TwitchAPISettings) {
     this.settings = settings;
 
+    this.bits = new BitsClient(this);
     this.users = new UsersClient(this);
   }
 
