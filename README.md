@@ -56,9 +56,9 @@ const { TwitchAPI } = require('twitch-api-ts').default;
   - [ ] Get charity campaign donations.
 - Chat:
   - [ ] Get chatters.
-  - [ ] Get channel emotes.
-  - [ ] Get global emotes.
-  - [ ] Get emote sets.
+  - [x] Get channel emotes.
+  - [x] Get global emotes.
+  - [x] Get emote sets.
   - [ ] Get channel chat badges.
   - [ ] Get chat settings.
   - [ ] Update chat settings.

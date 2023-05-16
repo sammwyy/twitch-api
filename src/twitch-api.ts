@@ -5,6 +5,7 @@ import { TwitchAPIException } from './twitch-api-exception';
 import { TwitchUser } from './users';
 import { UsersClient } from './users/users-client';
 import { jsonToURLEncoded } from './utils';
+import { ChatClient } from './chat';
 
 interface TwitchAPISettings {
   clientId: string;
@@ -18,6 +19,7 @@ export class TwitchAPI {
 
   public readonly bits: BitsClient;
   public readonly channelpoints: ChannelPointsClient;
+  public readonly chat: ChatClient;
   public readonly users: UsersClient;
 
   constructor(settings: TwitchAPISettings) {
@@ -26,19 +28,16 @@ export class TwitchAPI {
 
     this.bits = new BitsClient(this);
     this.channelpoints = new ChannelPointsClient(this);
+    this.chat = new ChatClient(this);
     this.users = new UsersClient(this);
   }
 
-  public async getUser(): Promise<TwitchUser> {
+  public async getCurrentUser(): Promise<TwitchUser> {
     if (!this.user) {
       this.user = await this.users.getUser();
     }
 
     return this.user;
-  }
-
-  public async setUser(user: TwitchUser) {
-    this.user = user;
   }
 
   private _endpoint(
