@@ -20,13 +20,7 @@ export class UsersClient {
 
   public async getUser(props?: GetUserProps): Promise<TwitchUser> {
     const { data } = await this.api.get('users', props);
-    const user = data[0] as TwitchUser;
-
-    if (props == null) {
-      this.api.setUser(user);
-    }
-
-    return user;
+    return data[0] as TwitchUser;
   }
 
   public async getUsers(props: GetUsersProps): Promise<TwitchUser[]> {

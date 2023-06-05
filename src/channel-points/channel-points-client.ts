@@ -28,7 +28,7 @@ export class ChannelPointsClient {
   public async createCustomReward(
     props: CreateCustomRewardProps,
   ): Promise<CustomReward> {
-    const broadcaster_id = (await this.api.getUser()).id;
+    const broadcaster_id = (await this.api.getCurrentUser()).id;
     const { data } = await this.api.post(
       'channel_points/custom_rewards',
       { broadcaster_id },
@@ -38,7 +38,7 @@ export class ChannelPointsClient {
   }
 
   public async deleteCustomReward(id: string): Promise<boolean> {
-    const broadcaster_id = (await this.api.getUser()).id;
+    const broadcaster_id = (await this.api.getCurrentUser()).id;
     await this.api.delete('channel_points/custom_rewards', {
       broadcaster_id,
       id,
@@ -47,7 +47,7 @@ export class ChannelPointsClient {
   }
 
   public async getCustomReward(id: string): Promise<CustomReward | null> {
-    const broadcaster_id = (await this.api.getUser()).id;
+    const broadcaster_id = (await this.api.getCurrentUser()).id;
 
     const reward = await this.api
       .get('channel_points/custom_rewards', {
@@ -65,7 +65,7 @@ export class ChannelPointsClient {
   public async getCustomRewards(
     only_manageable_rewards = false,
   ): Promise<CustomReward[]> {
-    const broadcaster_id = (await this.api.getUser()).id;
+    const broadcaster_id = (await this.api.getCurrentUser()).id;
     const { data } = await this.api.get('channel_points/custom_rewards', {
       broadcaster_id,
       only_manageable_rewards,
